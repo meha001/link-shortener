@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Сокращатель ссылок</title>
+    <style>
+      /* Reset */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        color: #0f172a;
+        background: linear-gradient(180deg, #0f172a 0%, #07102a 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      /* Card */
+      .card {
+        width: 100%;
+        max-width: 920px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.03),
+          rgba(255, 255, 255, 0.02)
+        );
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+        padding: 28px;
+        backdrop-filter: blur(6px);
+      }
+      .header {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+      .logo {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #7c3aed, #06b6d4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 20px;
+      }
+      h1 {
+        font-size: 20px;
+        color: #e6eef8;
+      }
+      p.lead {
+        color: #98a8c7;
+        margin-top: 6px;
+      }
+
+      /* form */
+      form {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+      }
+      .input {
+        flex: 1;
+        display: flex;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 12px;
+        border-radius: 12px;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+      input[type="text"] {
+        flex: 1;
+        background: transparent;
+        border: 0;
+        color: #e6eef8;
+        font-size: 16px;
+        outline: none;
+      }
+      button.primary {
+        background: linear-gradient(90deg, #7c3aed, #06b6d4);
+        border: 0;
+        padding: 12px 16px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* result */
+      .result {
+        margin-top: 18px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .chip {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        color: #cfe5ff;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+      }
+      .btn {
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        background: transparent;
+        color: #dbeeff;
+        cursor: pointer;
+      }
+
+      /* list */
+      .list {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+      }
+      .item {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+      }
+      .muted {
+        color: #9fb1d6;
+        font-size: 13px;
+      }
+      a.k {
+        color: #dbeeff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      /* responsive tweaks */
+      @media (max-width: 720px) {
+        .header {
+          flex-direction: row;
+          gap: 12px;
+        }
+        form {
+          flex-direction: column;
+        }
+        .actions {
+          margin-left: 0;
+        }
+      }
+
+      /* subtle animations */
+      .card {
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+      }
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 50px rgba(2, 6, 23, 0.7);
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="header">
+        <div class="logo">SS</div>
+        <div>
+          <h1>Сократить ссылку</h1>
+          <p class="lead">
+            Вставь ссылку, получи короткую ссылку
+          </p>
+        </div>
+      </div>
+
+      <form id="shortenForm" onsubmit="return handleSubmit(event)">
+        <div class="input">
+          <input
+            id="urlInput"
+            type="text"
+            placeholder="Вставьте или введите URL (пример: example.com или https://site.ru/path)"
+            required
+          />
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 4px">
+          <button class="primary" type="submit">Сократить</button>
+        </div>
+      </form>
+
+      <div id="resultArea" style="display: none">
+        <div class="result">
+          <div class="chip" id="shortLink"></div>
+          <div class="actions">
+            <button class="btn" onclick="copyLink()">Копировать</button>
+            <a id="openBtn" class="btn" target="_blank">Открыть</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="list" id="linksList"></div>
+
+      <p style="margin-top: 16px; color: #8fa8d0; font-size: 13px">
+            По всем вопросам и предложениям можно обратиться к автору работы:
+            <a style="font-size:15px; margin-left:15px; color:#8fa8d0;" href="https://t.me/nabiev06" target="_blank">Telegram</a>
+            <a style="font-size:15px; margin-left:15px; color:#8fa8d0;" href="https://github.com/mehruboni-nabii" target="_blank">Github</a>
+            </p>
+    </div>
+
+    <script>
+      async function handleSubmit(e) {
+        e.preventDefault();
+        const url = document.getElementById("urlInput").value.trim();
+        if (!url) return;
+        const res = await fetch("/api/shorten", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url }),
+        });
+        const data = await res.json();
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+        const short = data.short;
+        const shortEl = document.getElementById("shortLink");
+        shortEl.textContent = short;
+        document.getElementById("openBtn").href = short;
+        document.getElementById("resultArea").style.display = "block";
+        loadList();
+      }
+
+      function copyLink() {
+        const t = document.getElementById("shortLink").textContent;
+        navigator.clipboard
+          .writeText(t)
+          .then(() => {
+            alert("Ссылка скопирована");
+          })
+          .catch(() => alert("Не удалось скопировать"));
+      }
+
+      async function loadList() {
+        const res = await fetch("/api/list");
+        const data = await res.json();
+        const container = document.getElementById("linksList");
+        container.innerHTML = "";
+        if (data.length === 0) {
+          container.innerHTML =
+            '<p class="muted">Пока нет созданных ссылок</p>';
+          return;
+        }
+        data.forEach((item) => {
+          const el = document.createElement("div");
+          el.className = "item";
+          el.innerHTML = `<div><a class='k' href='${item.url}' target='_blank'>${item.short}</a></div><div class='muted'>${item.target}</div><div class='muted'>Кликов: ${item.clicks}</div>`;
+          container.appendChild(el);
+        });
+      }
+
+      window.addEventListener("load", loadList);
+    </script>
+  </body>
+</html>
