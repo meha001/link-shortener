@@ -10,6 +10,9 @@ markdown
 
 🔗 [Ссылка на сайт](https://nabiev00shortedurl.pythonanywhere.com)
 
+<img width="1006" height="420" alt="image" src="https://github.com/user-attachments/assets/ca129f61-1765-459f-8ae7-c0a12d168d2f" />
+
+
 ---
 
 ## 🧰 Используемые технологии
